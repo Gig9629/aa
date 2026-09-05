@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>AR ปลามังกร</title>
+  <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+  <script src="https://raw.githack.com/AR-js-org/AR.js/3.4.7/aframe/build/aframe-ar.js"></script>
+  <style>
+    html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#000;font-family:system-ui,"Noto Sans Thai",sans-serif}
+    .ui{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:9999;display:flex;flex-wrap:wrap;gap:8px;justify-content:center;width:min(96vw,560px)}
+    button{border:0;border-radius:14px;padding:12px 15px;font-size:16px;font-weight:700;background:rgba(255,255,255,.92);color:#111;box-shadow:0 4px 14px rgba(0,0,0,.25);touch-action:manipulation}
+    button:active{transform:scale(.97)}
+    .speed{min-width:86px}
+    .active{background:#111;color:#fff}
+    .panel{position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:9999;background:rgba(0,0,0,.62);color:#fff;padding:9px 14px;border-radius:999px;font-size:14px;backdrop-filter:blur(6px)}
+  </style>
+</head>
+<body>
+  <div class="panel" id="status">ส่องกล้องไปที่ Hiro marker เพื่อเรียกปลามังกร</div>
+  <div class="ui">
+    <button class="speed" data-speed="0.5">ช้า</button>
+    <button class="speed active" data-speed="1">ปกติ</button>
+    <button class="speed" data-speed="2">เร็ว</button>
+    <button class="speed" data-speed="3.5">เร็วมาก</button>
+  </div>
+
+  <a-scene embedded vr-mode-ui="enabled:false" renderer="antialias:true; colorManagement:true; alpha:true"
+           arjs="sourceType:webcam; debugUIEnabled:false; detectionMode:mono_and_matrix; matrixCodeType:3x3">
+    <a-assets>
+      <a-mixin id="fin" geometry="primitive:triangle" material="color:#ff6b35;side:double;opacity:.95"></a-mixin>
+    </a-assets>
+
+    <a-marker id="marker" type="pattern" url="hiro.patt" size="1" emitevents="true" smooth="true" smooth-count="8">
+      <a-entity id="dragon" position="0 0.30 0" scale="0.55 0.55 0.55">
+        <!-- body -->
+        <a-entity id="body" geometry="primitive:sphere;segmentsWidth:32;segmentsHeight:18" scale="1.8 .85 .75" material="color:#d7263d;roughness:.7;metalness:.15"></a-entity>
+        <a-entity geometry="primitive:sphere;segmentsWidth:24;segmentsHeight:16" position=".95 .02 0" scale=".48 .52 .52" material="color:#f15a29;roughness:.75"></a-entity>
+        <!-- head -->
+        <a-entity id="head" position="1.25 .30 0" rotation="0 0 0">
+          <a-entity geometry="primitive:sphere;segmentsWidth:24;segmentsHeight:16" scale=".70 .65 .65" material="color:#b5172e;roughness:.65"></a-entity>
+          <a-entity geometry="primitive:sphere;segmentsWidth:16;segmentsHeight:12" position=".54 -.05 .34" scale=".14 .14 .14" material="color:#ffe66d;emissive:#ffe66d;emissiveIntensity:1.2"></a-entity>
+          <a-entity geometry="primitive:sphere;segmentsWidth:16;segmentsHeight:12" position=".54 -.05 -.34" scale=".14 .14 .14" material="color:#ffe66d;emissive:#ffe66d;emissiveIntensity:1.2"></a-entity>
+          <a-entity geometry="primitive:sphere;segmentsWidth:12;segmentsHeight:8" position=".62 -.05 .34" scale=".06 .06 .06" material="color:#111"></a-entity>
+          <a-entity geometry="primitive:sphere;segmentsWidth:12;segmentsHeight:8" position=".62 -.05 -.34" scale=".06 .06 .06" material="color:#111"></a-entity>
+          <!-- horns -->
+          <a-entity geometry="primitive:cone;radiusBottom:.13;radiusTop:0;height:.5" position=".0 .64 .30" rotation="-12 0 0" material="color:#f7d154"></a-entity>
+          <a-entity geometry="primitive:cone;radiusBottom:.13;radiusTop:0;height:.5" position=".0 .64 -.30" rotation="-12 0 0" material="color:#f7d154"></a-entity>
+          <!-- whiskers -->
+          <a-entity geometry="primitive:cylinder;radius:.018;height:.62" position=".52 -.20 .43" rotation="72 0 -12" material="color:#f7d154"></a-entity>
+          <a-entity geometry="primitive:cylinder;radius:.018;height:.62" position=".52 -.20 -.43" rotation="-72 0 -12" material="color:#f7d154"></a-entity>
+          <!-- mouth -->
+          <a-entity geometry="primitive:sphere" position=".57 -.22 0" scale=".30 .06 .28" material="color:#5b0a14"></a-entity>
+        </a-entity>
+
+        <!-- dorsal spines -->
+        <a-entity geometry="primitive:cone;radiusBottom:.14;radiusTop:0;height:.42" position=".55 .72 0" rotation="0 0 90" material="color:#ff9f1c"></a-entity>
+        <a-entity geometry="primitive:cone;radiusBottom:.12;radiusTop:0;height:.36" position="0 .68 0" rotation="0 0 90" material="color:#ff9f1c"></a-entity>
+        <a-entity geometry="primitive:cone;radiusBottom:.10;radiusTop:0;height:.30" position="-.55 .62 0" rotation="0 0 90" material="color:#ff9f1c"></a-entity>
+
+        <!-- side fins -->
+        <a-entity mixin="fin" position=".45 .15 .66" scale=".9 .8 .8" rotation="0 0 20"></a-entity>
+        <a-entity mixin="fin" position=".45 .15 -.66" scale=".9 .8 .8" rotation="0 180 -20"></a-entity>
+        <a-entity mixin="fin" position="-.75 .05 .55" scale=".55 .6 .6" rotation="0 0 55"></a-entity>
+        <a-entity mixin="fin" position="-.75 .05 -.55" scale=".55 .6 .6" rotation="0 180 -55"></a-entity>
+
+        <!-- tail -->
+        <a-entity id="tail1" position="-1.72 .02 0" rotation="0 0 0">
+          <a-entity geometry="primitive:cone;radiusBottom:.55;radiusTop:.20;height:1.05" rotation="0 0 -90" material="color:#b5172e;roughness:.7"></a-entity>
+        </a-entity>
+        <a-entity id="tail2" position="-2.40 .02 0" rotation="0 0 0">
+          <a-entity geometry="primitive:cone;radiusBottom:.36;radiusTop:0;height:.82" rotation="0 0 -90" material="color:#f15a29;roughness:.7"></a-entity>
+        </a-entity>
+        <!-- tail flame fins -->
+        <a-entity mixin="fin" position="-2.78 .05 .12" scale=".75 .75 .75" rotation="0 0 80"></a-entity>
+        <a-entity mixin="fin" position="-2.78 .05 -.12" scale=".75 .75 .75" rotation="0 180 -80"></a-entity>
+        
+        <!-- simple magical aura -->
+        <a-entity geometry="primitive:ring;radiusInner:2.9;radiusOuter:3.0;segmentsTheta:64" rotation="-90 0 0"
+                  material="color:#ffe66d;opacity:.25;transparent:true;side:double"></a-entity>
+      </a-entity>
+    </a-marker>
+
+    <a-entity camera></a-entity>
+  </a-scene>
+
+  <script>
+    const dragon = document.querySelector('#dragon');
+    const tail1 = document.querySelector('#tail1');
+    const tail2 = document.querySelector('#tail2');
+    const marker = document.querySelector('#marker');
+    const status = document.querySelector('#status');
+    const buttons = [...document.querySelectorAll('.speed')];
+    let speed = 1;
+    let t = 0;
+    let last = performance.now();
+
+    function applySpeed(value){
+      speed = Number(value);
+      buttons.forEach(b => b.classList.toggle('active', Number(b.dataset.speed) === speed));
+      status.textContent = `ปลามังกร: ${speed < 1 ? 'ช้า' : speed === 1 ? 'ปกติ' : speed === 2 ? 'เร็ว' : 'เร็วมาก'} ×${speed}`;
+    }
+
+    buttons.forEach(b => b.addEventListener('click', () => applySpeed(b.dataset.speed)));
+
+    marker.addEventListener('markerFound', () => {
+      status.textContent = `พบ marker แล้ว — ความเร็ว ×${speed}`;
+    });
+    marker.addEventListener('markerLost', () => {
+      status.textContent = 'ไม่พบ marker — หันกล้องไปที่ Hiro marker';
+    });
+
+    function animate(now){
+      const dt = Math.min(0.05, (now-last)/1000);
+      last = now;
+      t += dt * speed;
+      const wave = Math.sin(t * 5.0) * 13;
+      const wave2 = Math.sin(t * 5.0 + 0.8) * 18;
+      tail1.object3D.rotation.y = THREE.MathUtils.degToRad(wave * 0.55);
+      tail2.object3D.rotation.y = THREE.MathUtils.degToRad(wave2);
+      dragon.object3D.position.y = 0.30 + Math.sin(t*2.2)*0.035;
+      dragon.object3D.rotation.z = Math.sin(t*1.7)*0.02;
+      requestAnimationFrame(animate);
+    }
+    requestAnimationFrame(animate);
+  </script>
+</body>
+</html>
